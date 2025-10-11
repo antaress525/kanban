@@ -1,6 +1,5 @@
 <template>
     <button
-      :key="index"
       :class="[
         'py-2 px-3 text-left text-sm font-medium rounded-lg transition-colors',
         {
