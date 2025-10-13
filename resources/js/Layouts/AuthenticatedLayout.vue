@@ -16,7 +16,7 @@
                                 <Bell class="w-5 h-5" />
                                 Notifications
                             </NavItems>
-                            <NavItems as="button">
+                            <NavItems @click="openEditProfileModal" as="button">
                                 <Settings class="w-5 h-5" />
                                 Parametres
                             </NavItems>
@@ -65,6 +65,7 @@
     <Teleport to="body">
         <Create :open="openKanban" @close="closeKanbanModal"/>
         <DeleteKanban :open="openDelete" :kanban-id="kanbanId" @close="closeDeleteModal" />
+        <EditProfile :open="openEditProfile" @close="closeEditProfileModal"/>
     </Teleport>
 </template>
 
@@ -81,6 +82,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import NavKanban from '@/components/NavKanban.vue';
 import Create from '@/Pages/Kanban/Partials/Create.vue';
 import DeleteKanban from '@/Pages/Kanban/Partials/DeleteKanban.vue';
+import EditProfile from '@/Partials/EditProfile.vue';
 
 const page = usePage();
 
@@ -94,6 +96,7 @@ const kanbans = computed(() => {
 
 const openKanban = ref(false)
 const openDelete = ref(false)
+const openEditProfile = ref(false)
 const kanbanId = ref(null)
 
 const openKanbanModal = () => {
@@ -111,6 +114,14 @@ const openDeleteModal = (kanban) => {
 const closeDeleteModal = () => {
     openDelete.value = false
     kanbanId.value = null
+}
+
+const openEditProfileModal = () => {
+    openEditProfile.value = true
+}
+
+const closeEditProfileModal = () => {
+    openEditProfile.value = false
 }
 
 </script>

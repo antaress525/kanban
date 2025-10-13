@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileUserController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,10 @@ Route::prefix('dashboard')->middleware(['auth'])->name('task.')->controller(Task
     Route::put('kanban/{task}', 'updateBase')
         ->whereNumber('task')
         ->name('update.base');
+});
+
+Route::prefix('dashboard')->middleware(['auth'])->name('profile.')->controller(ProfileUserController::class)->group(function() {
+    Route::put('profile', 'update')->name('update');
 });
 
 
