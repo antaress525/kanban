@@ -27,29 +27,63 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('dashboard')->middleware(['auth'])->name('kanban.')->controller(KanbanController::class)->group(function () {
-    Route::get('/kanban', 'index')->name('index');
-    Route::post('/kanban', 'store')->name('store');
-    Route::get('kanban/{kanban}/', 'show')
-        ->whereNumber('kanban')
-        ->name('show');
-    Route::delete('kanban/{kanban}/', 'delete')
-        ->whereNumber('kanban')
-        ->name('delete');
-});
+Route::prefix('dashboard')
+    ->middleware(['auth'])
+    ->group(function () {
+        
+        /*
+        |--------------------------------------------------------------------------
+        | Kanban Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('kanban')
+            ->name('kanban.')
+            ->controller(KanbanController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{kanban}', 'show')
+                    ->whereNumber('kanban')
+                    ->name('show');
+                Route::delete('/{kanban}', 'delete')
+                    ->whereNumber('kanban')
+                    ->name('delete');
+            }
+        );
 
-Route::prefix('dashboard')->middleware(['auth'])->name('task.')->controller(TaskController::class)->group(function() {
-    Route::post('kanban/{kanban}', 'store')
-        ->whereNumber('kanban')
-        ->name('store');
-    Route::put('kanban/{task}', 'updateBase')
-        ->whereNumber('task')
-        ->name('update.base');
-});
+        /*
+        |--------------------------------------------------------------------------
+        | Task Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('kanban')
+            ->name('task.')
+            ->controller(TaskController::class)
+            ->group(function () {
+                Route::post('/{kanban}', 'store')
+                    ->whereNumber('kanban')
+                    ->name('store');
 
-Route::prefix('dashboard')->middleware(['auth'])->name('profile.')->controller(ProfileUserController::class)->group(function() {
-    Route::put('profile', 'update')->name('update');
-});
+                Route::put('/{task}', 'updateBase')
+                    ->whereNumber('task')
+                    ->name('update.base');
+            }
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Profile Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('profile')
+            ->name('profile.')
+            ->controller(ProfileUserController::class)
+            ->group(function () {
+                Route::put('/', 'update')->name('update');
+            }
+        );
+    }
+);
 
 
 require __DIR__.'/auth.php';
