@@ -1,0 +1,127 @@
+[
+  {
+    "title": "Développement plateforme Kanban",
+    "description": "Application de gestion de projets avec Vue.js, Laravel et Inertia.",
+    "color": "#3B82F6",
+    "tasks": [
+      {
+        "title": "Initialiser le projet Laravel",
+        "description": "Configurer le projet avec Inertia et Vue.js 3.",
+        "due_date": "2025-10-20",
+        "status": "done",
+        "priority": "high",
+        "order": "1"
+      },
+      {
+        "title": "Créer le modèle Kanban et Task",
+        "description": "Créer les relations entre les modèles.",
+        "due_date": "2025-10-21",
+        "status": "in_progress",
+        "priority": "medium",
+        "order": "2"
+      },
+      {
+        "title": "Mettre en place le design des colonnes",
+        "description": "Utiliser Tailwind CSS et Vue pour les colonnes dynamiques.",
+        "due_date": "2025-10-23",
+        "status": "todo",
+        "priority": "low",
+        "order": "3"
+      },
+      {
+        "title": "Ajouter le drag and drop",
+        "description": "Intégrer la librairie Sortable.js pour déplacer les tâches.",
+        "due_date": "2025-10-25",
+        "status": "todo",
+        "priority": "high",
+        "order": "4"
+      },
+      {
+        "title": "Mettre en place la recherche fulltext",
+        "description": "Configurer Scout et Typesense pour indexer les kanbans.",
+        "due_date": "2025-10-28",
+        "status": "todo",
+        "priority": "medium",
+        "order": "5"
+      }
+    ]
+  },
+  {
+    "title": "Site e-commerce sneakers",
+    "description": "Développement d’un site e-commerce pour la vente de chaussures.",
+    "color": "#F97316",
+    "tasks": [
+      {
+        "title": "Créer la base de données produits",
+        "description": "Modéliser les entités Product, Brand et Category.",
+        "due_date": "2025-10-15",
+        "status": "done",
+        "priority": "high",
+        "order": "1"
+      },
+      {
+        "title": "Mettre en place le panier",
+        "description": "Implémenter les sessions et la persistance du panier.",
+        "due_date": "2025-10-17",
+        "status": "in_progress",
+        "priority": "medium",
+        "order": "2"
+      },
+      {
+        "title": "Intégrer le paiement Stripe",
+        "description": "Configurer le système de paiement sécurisé avec Stripe.",
+        "due_date": "2025-10-22",
+        "status": "todo",
+        "priority": "high",
+        "order": "3"
+      },
+      {
+        "title": "Ajouter les avis clients",
+        "description": null,
+        "due_date": null,
+        "status": "todo",
+        "priority": "low",
+        "order": "4"
+      }
+    ]
+  },
+  {
+    "title": "Application de gestion d’événements",
+    "description": "Planification et gestion des événements avec notifications.",
+    "color": "#10B981",
+    "tasks": [
+      {
+        "title": "Créer les modèles Event et Participant",
+        "description": "Définir les relations et les contraintes entre modèles.",
+        "due_date": "2025-10-18",
+        "status": "done",
+        "priority": "high",
+        "order": "1"
+      },
+      {
+        "title": "Ajouter le calendrier interactif",
+        "description": "Intégrer FullCalendar pour la visualisation des événements.",
+        "due_date": "2025-10-20",
+        "status": "in_progress",
+        "priority": "medium",
+        "order": "2"
+      },
+      {
+        "title": "Envoyer des notifications",
+        "description": "Configurer les notifications par email et navigateur.",
+        "due_date": null,
+        "status": "todo",
+        "priority": "low",
+        "order": "3"
+      },
+      {
+        "title": "Mettre en place l’authentification",
+        "description": null,
+        "due_date": null,
+        "status": "todo",
+        "priority": "medium",
+        "order": "4"
+      }
+    ]
+  }
+]
