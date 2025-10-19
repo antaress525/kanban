@@ -8,7 +8,7 @@
             <div class="h-full overflow-y-auto space-y-6 px-2 md:px-4">
                     <NavGroup label="Menu Principale">
                         <template #nav-items>
-                            <NavItems as="button">
+                            <NavItems @click="openResearchModal" as="button">
                                 <search class="w-5 h-5" />
                                 Recherche
                             </NavItems>
@@ -36,15 +36,14 @@
                             </NavItems>
                         </template>
                     </NavGroup>
-            </div>
-            
+            </div>   
         </div>
         <!-- Page Content -->
         <div class="flex-1 flex flex-col">
             <header class="flex lg:hidden items-center justify-between px-4 py-2 border-b border-neutral-100">
                 <ResponsiveNav />
                 <div class="flex items-center gap-x-3.5">
-                    <Button variant="ghost" size="icon">
+                    <Button @click="openResearchModal" variant="ghost" size="icon">
                         <Search class="w-5 h-5" />
                     </Button>
                     <Button class="relative" variant="ghost" size="icon">
@@ -66,6 +65,7 @@
         <Create :open="openKanban" @close="closeKanbanModal"/>
         <DeleteKanban :open="openDelete" :kanban-id="kanbanId" @close="closeDeleteModal" />
         <EditProfile :open="openEditProfile" @close="closeEditProfileModal"/>
+        <FullTextResearch :open="openResearch" @close="closeResearchModal" @open-with-shortcut="openResearchModal" />
     </Teleport>
 </template>
 
@@ -83,6 +83,7 @@ import NavKanban from '@/components/NavKanban.vue';
 import Create from '@/Pages/Kanban/Partials/Create.vue';
 import DeleteKanban from '@/Pages/Kanban/Partials/DeleteKanban.vue';
 import EditProfile from '@/Partials/EditProfile.vue';
+import FullTextResearch from '@/Partials/FullTextResearch.vue';
 
 const page = usePage();
 
@@ -97,6 +98,7 @@ const kanbans = computed(() => {
 const openKanban = ref(false)
 const openDelete = ref(false)
 const openEditProfile = ref(false)
+const openResearch = ref(false)
 const kanbanId = ref(null)
 
 const openKanbanModal = () => {
@@ -122,6 +124,14 @@ const openEditProfileModal = () => {
 
 const closeEditProfileModal = () => {
     openEditProfile.value = false
+}
+
+const openResearchModal = () => {
+    openResearch.value = true
+}
+
+const closeResearchModal = () => {
+    openResearch.value = false
 }
 
 </script>

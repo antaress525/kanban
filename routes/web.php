@@ -48,6 +48,7 @@ Route::prefix('dashboard')
                 Route::delete('/{kanban}', 'delete')
                     ->whereNumber('kanban')
                     ->name('delete');
+                Route::get('seacrh', 'search')->name('search');
             }
         );
 

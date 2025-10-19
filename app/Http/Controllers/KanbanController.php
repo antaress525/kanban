@@ -48,4 +48,14 @@ class KanbanController extends Controller
         }
         return to_route('kanban.index');
     }
+
+    public function search(Request $request) {
+        sleep(1);
+        $query =  trim($request->input('q', ''));
+        if($query === ''){
+            return response()->json([]);
+        }
+        $results = Kanban::search($query)->get();
+        return response()->json($results);
+    }
 }
