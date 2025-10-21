@@ -41,7 +41,11 @@
         <!-- Page Content -->
         <div class="flex-1 flex flex-col">
             <header class="flex lg:hidden items-center justify-between px-4 py-2 border-b border-neutral-100">
-                <ResponsiveNav />
+                <button class="space-y-1 w-5 rounded-md" @click="openResponsiveNavModal">
+                    <div class="h-0.5  bg-black"></div>
+                    <div class="h-0.5  bg-black"></div>
+                    <div class="h-0.5  bg-black"></div>
+                </button>
                 <div class="flex items-center gap-x-3.5">
                     <Button @click="openResearchModal" variant="ghost" size="icon">
                         <Search class="w-5 h-5" />
@@ -62,6 +66,12 @@
         </div>
     </div>
     <Teleport to="body">
+        <ResponsiveNav 
+            :open="openResponsiveNav" 
+            @close="closeResponsiveNavModal" 
+            @create-kanban="openKanbanModal" 
+            @delete-kanban="openDeleteModal"
+        />
         <Create :open="openKanban" @close="closeKanbanModal"/>
         <DeleteKanban :open="openDelete" :kanban-id="kanbanId" @close="closeDeleteModal" />
         <EditProfile :open="openEditProfile" @close="closeEditProfileModal"/>
@@ -97,6 +107,7 @@ const kanbans = computed(() => {
 
 const openKanban = ref(false)
 const openDelete = ref(false)
+const openResponsiveNav = ref(false)
 const openEditProfile = ref(false)
 const openResearch = ref(false)
 const kanbanId = ref(null)
@@ -121,7 +132,6 @@ const closeDeleteModal = () => {
 const openEditProfileModal = () => {
     openEditProfile.value = true
 }
-
 const closeEditProfileModal = () => {
     openEditProfile.value = false
 }
@@ -129,9 +139,15 @@ const closeEditProfileModal = () => {
 const openResearchModal = () => {
     openResearch.value = true
 }
-
 const closeResearchModal = () => {
     openResearch.value = false
+}
+
+const openResponsiveNavModal = () => {
+    openResponsiveNav.value = true
+}
+const closeResponsiveNavModal = () => {
+    openResponsiveNav.value = false
 }
 
 </script>

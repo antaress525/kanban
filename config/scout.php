@@ -197,6 +197,7 @@ return [
                         [
                             'name' => 'description',
                             'type' => 'string',
+                            'optional' => true,
                         ],
                         [
                             'name' => 'created_at',
