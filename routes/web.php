@@ -64,10 +64,11 @@ Route::prefix('dashboard')
                 Route::post('/{kanban}', 'store')
                     ->whereNumber('kanban')
                     ->name('store');
-
                 Route::put('/{task}', 'updateBase')
                     ->whereNumber('task')
                     ->name('update.base');
+                Route::put('/tasks/{task}/reorder', 'reorder')
+                    ->name('reorder');
             }
         );
 
