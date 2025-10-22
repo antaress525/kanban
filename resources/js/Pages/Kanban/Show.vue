@@ -98,7 +98,7 @@ import TaskContainer from '@/components/TaskContainer.vue';
 import TaskItem from '@/components/TaskItem.vue';
 import CreateTask from './Partials/CreateTask.vue';
 import EditTask from './Partials/EditTask.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { router, Head } from '@inertiajs/vue3'; // 👈 Import de 'router'
 
 const props = defineProps({
@@ -116,6 +116,18 @@ const allTasks = ref({
     in_progress: { data: props.tasks.in_progress.data, total: props.tasks.in_progress.total },
     done: { data: props.tasks.done.data, total: props.tasks.done.total },
 });
+
+watch(() => props.tasks, (newTasks) => {
+    allTasks.value.todo.data = newTasks.todo.data;
+    allTasks.value.todo.total = newTasks.todo.total;
+    
+    allTasks.value.in_progress.data = newTasks.in_progress.data;
+    allTasks.value.in_progress.total = newTasks.in_progress.total;
+    
+    allTasks.value.done.data = newTasks.done.data;
+    allTasks.value.done.total = newTasks.done.total;
+
+}, { deep: true });
 
 
 const openCreateTask = ref(false)
