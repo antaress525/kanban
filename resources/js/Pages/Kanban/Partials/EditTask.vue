@@ -34,7 +34,7 @@
                             <div class="flex items-center justify-end gap-x-3">
                                 <Button @click="emits('close')" type="button" variant="ghost">Annuler</Button>
                                 <Button :disabled="form.processing">
-                                    <Loader2 v-if="form.processing" class="w-5 h-5 animate-spin" />
+                                    <Spinner v-if="form.processing" />
                                     Modifier
                                 </Button>
                             </div>
@@ -50,7 +50,7 @@
 
 <script setup>
 import BaseModal from '@/components/BaseModal.vue'
-import { X, Loader2 } from 'lucide-vue-next'
+import { X } from 'lucide-vue-next'
 import Label from '@/components/ui/label/Label.vue'
 import Input from '@/components/ui/input/Input.vue'
 import InputError from '@/components/InputError.vue'
@@ -61,6 +61,7 @@ import { watch } from 'vue'
 import Tabs from '@/components/Tabs/Tabs.vue'
 import TabList from '@/components/Tabs/TabList.vue'
 import TabPannel from '@/components/Tabs/TabPannel.vue'
+import Spinner from '@/components/Spinner.vue'
 
 const props = defineProps({
     task: {

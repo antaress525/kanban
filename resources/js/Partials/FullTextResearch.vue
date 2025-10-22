@@ -5,7 +5,7 @@
             <!-- Input -->
             <div class="relative flex items-center bg-blue-200 border-b border-neutral-200">
                 <div class="absolute ml-2 text-neutral-400">
-                    <Loader2 v-if="processing" class="size-5 animate-spin" />
+                    <Spinner v-if="processing" />
                     <Search v-else class="size-5" />
                 </div>
                 <input class="w-full h-11 px-9 focus:outline-none" type="text" v-model="search" placeholder="Recherche kanban"/>
@@ -41,11 +41,12 @@
 
 <script setup>
 import axios from 'axios'
-import { Search, X, Loader2, LayoutGrid } from 'lucide-vue-next'
+import { Search, X } from 'lucide-vue-next'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import NavItem2 from '@/components/NavItem2.vue'
 import { debounce } from 'lodash'
 import FadeIntDown from '@/Transitions/FadeIntDown.vue'
+import Spinner from '@/components/Spinner.vue'
 
 const props = defineProps({
     open: {

@@ -22,7 +22,7 @@
                 <div class="flex items-center justify-end gap-x-3">
                     <Button @click="emits('close')" type="button" variant="ghost">Annuler</Button>
                     <Button :disabled="form.processing">
-                        <Loader2 v-show="form.processing" class="w-5 h-5 animate-spin" />
+                        <Spinner v-show="form.processing" />
                         Creer la kanban
                     </Button>
                 </div>
@@ -33,13 +33,14 @@
 
 <script setup>
 import Button from '@/components/ui/button/Button.vue'
-import { X, Loader2 } from 'lucide-vue-next'
+import { X } from 'lucide-vue-next'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import SelectedColors from '@/components/SelectedColors.vue'
 import InputError from '@/components/InputError.vue'
 import { useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Spinner from '@/components/Spinner.vue'
 
 const props = defineProps({
     open: {

@@ -48,7 +48,7 @@
                             <div class="flex items-center justify-end gap-x-2">
                                 <Button @click="close" type="button" variant="ghost">Annuler</Button>
                                 <Button>
-                                    <Loader2 v-if="profileForm.processing" class="w-5 h-5 animate-spin" />
+                                    <Spinner v-if="profileForm.processing" />
                                     Sauvegarder
                                 </Button>
                             </div>
@@ -75,7 +75,7 @@ import TabPannel2 from '@/components/Tabs2/TabPannel2.vue'
 import Label from '@/components/ui/label/Label.vue'
 import Input from '@/components/ui/input/Input.vue'
 import InputError from '@/components/InputError.vue'
-import { Loader2 } from 'lucide-vue-next'
+import Spinner from '@/components/Spinner.vue'
 
 defineProps({
     open: {

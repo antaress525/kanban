@@ -14,7 +14,7 @@
                 <Button @click="emits('close')" class="flex-1" variant="outline">Non, Annuler</Button>
                 
                 <Button @click="handleDelete" class="flex-1" variant="destructive" :disabled="form.processing">
-                    <Loader2 v-if="form.processing" class="size-5 mr-2 animate-spin" />
+                    <Spinner v-if="form.processing" />
                     <Trash v-else class="size-5 mr-2 text-white"/>
                     Oui, Supprimer
                 </Button>
@@ -28,6 +28,7 @@ import BaseModal from '@/components/BaseModal.vue';
 import { AlertTriangle, Trash, Loader2 } from 'lucide-vue-next';
 import Button from '@/components/ui/button/Button.vue';
 import { useForm } from '@inertiajs/vue3';
+import Spinner from './Spinner.vue';
 
 const props = defineProps({
     open: {
