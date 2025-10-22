@@ -1,10 +1,26 @@
 <template>
-    <div @click="emits('editTask', task)" class="bg-white p-3.5 space-y-4 border border-neutral-200 rounded-lg cursor-pointer hover:shadow-md transition-shadow">
+    <div @click="emits('editTask', task)" class="bg-white p-3.5 space-y-4 border border-neutral-200 rounded-lg cursor-pointer hover:shadow-md transition-shadow group">
         <!-- Header -->
         <div class="flex flex-col gap-y-0.5">
             <div class="flex items-center gap-x-2">
-                <Checkbox />
+                <Checkbox @click.stop="" />
                 <p class="font-medium text-sm w-full">{{ task.title }}</p>
+                <!-- Desktop -->
+                <button 
+                    @click.stop="emits('deleteTask', task.id)" 
+                    class="text-red-500 hidden md:block p-1.5 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Supprimer la tâche"
+                >
+                    <Trash2 class="size-4" />
+                </button>
+                <!-- Mobile -->
+                <button 
+                    @click.stop="emits('deleteTask', task.id)" 
+                    class="text-red-500 md:hidden p-1.5 hover:text-red-700 bg-red-50 rounded-full"
+                    title="Supprimer la tâche"
+                >
+                    <Trash2 class="size-4" />
+                </button>
             </div>
             <p v-if="task.description" class="text-sm font-medium text-neutral-400">{{ task.description }}</p>
         </div>
@@ -20,13 +36,15 @@
 import { Checkbox } from "@/components/ui/checkbox"
 import Tag from '@/components/Tag.vue';
 import { computed } from "vue";
+import { Trash2 } from 'lucide-vue-next';
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     task: {
         type: Object
     }
 })
-const emits = defineEmits(['editTask'])
+const emits = defineEmits(['editTask', 'deleteTask'])
 
 const priority = computed(() => {
     if(props.task?.priority === 'low') {
