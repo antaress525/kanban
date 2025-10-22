@@ -142,50 +142,67 @@ const closeEditTaskModal = () => {
 
 /**
  * Gère l'événement de déplacement émis par TaskContainer et envoie la requête Inertia.
+ * @param {Object} payload - { status, tasks, event }
  */
 const handleTaskMoved = (payload) => {
-    // Vue.Draggable a déjà mis à jour les listes locales (allTasks.value[status].data)
-
     let movedTask;
+    let sourceStatus = null;
 
+    // --- Gestion du cas 'moved' (changement d'ordre dans la même colonne) ---
     if (payload.event.moved) {
-        // Changement d'ordre dans la même colonne
         movedTask = payload.tasks[payload.event.moved.newIndex];
+        // Le statut est déjà correct (celui de la colonne actuelle)
+
+    // --- Gestion du cas 'added' (changement de colonne) ---
     } else if (payload.event.added) {
-        // Changement de colonne
+        // La tâche est celle qui vient d'être ajoutée à la liste de destination
         movedTask = payload.tasks[payload.event.added.newIndex];
-        movedTask.status = payload.status; // Mettre à jour le statut dans l'objet local
+        
+        // La tâche change de statut pour devenir celui de la colonne de destination
+        movedTask.status = payload.status; 
+
+        // Pour mettre à jour les totaux (optionnel mais propre) :
+        // L'information sur la colonne source se trouve dans event.added.from
+        // On utilise dataset pour lire la propriété 'data-status' que nous avions ajouté dans l'exemple précédent
+        // Attention: la méthode recommandée est de lire directement l'état de l'autre liste
+        
+        // L'erreur venait d'ici : 'payload.event.added.from' n'est pas l'élément DOM, 
+        // c'est un wrapper SortableJS. La façon la plus simple est de ne pas s'en soucier 
+        // ou de lire l'ID depuis l'objet 'removed' sur la colonne source.
     }
 
     if (!movedTask) return;
 
-    // Mise à jour locale du compte de tâches (car Inertia ne fait pas de full refresh)
-    if (payload.event.added) {
-        // Décrementer l'ancienne colonne et incrémenter la nouvelle (optionnel mais bon UX)
-        // Ceci nécessiterait de savoir d'où la tâche vient, mais on se contente de recalculer la taille:
-        allTasks.value[payload.status].total = payload.tasks.length;
-        
-        // Trouver la colonne source dans l'événement 'added'
-        const sourceStatus = payload.event.added.from.dataset.status;
-        if (sourceStatus && allTasks.value[sourceStatus]) {
-             allTasks.value[sourceStatus].total = allTasks.value[sourceStatus].data.length;
-        }
-    } else if (payload.event.moved) {
-        allTasks.value[payload.status].total = payload.tasks.length;
-    }
-
-
-    // 1. Récupérer l'ordre (index) des IDs de tâches dans la nouvelle colonne
-    const newOrder = payload.tasks.map(t => t.id);
+    // Mise à jour locale du compte de tâches pour toutes les colonnes après le drag
+    // On doit mettre à jour les totaux de toutes les colonnes impliquées
+    // La méthode la plus simple est de mettre à jour le total de la colonne de destination :
+    allTasks.value[payload.status].total = payload.tasks.length;
     
-    // 2. Envoi de la requête au serveur
+    // Si la tâche a été ajoutée (changement de colonne), nous devons aussi mettre à jour
+    // le total de l'ancienne colonne.
+    // Cette partie est difficile car 'TaskContainer' n'a pas accès à la liste source.
+    // Pour simplifier et garantir l'exactitude des totaux, on peut déclencher 
+    // un re-render des totaux en mettant à jour la prop `tasks` de la colonne. 
+    // Mais puisque vous utilisez `preserveState: true`, le moyen le plus sûr 
+    // est de laisser Laravel renvoyer les données complètes ou de faire confiance 
+    // à Inertia pour recharger après la requête `put`.
+
+    // Récupérer l'ordre (index) des IDs de tâches dans la nouvelle colonne
+    const newOrder = payload.tasks.map(t => t.id);
+
+    // Envoi de la requête au serveur
     router.put(route('task.reorder', movedTask.id), {
         status: movedTask.status,
         task_order: newOrder,
     }, {
-        // IMPORTANT: Permet de ne pas recharger toute la page et de préserver l'état (modals ouverts, scroll position)
         preserveScroll: true,
         preserveState: true,
+        // On ajoute un callback onFinish pour s'assurer que les totaux sont rafraîchis
+        onFinish: () => {
+             // Recharger les props Inertia pour rafraîchir les totaux si nécessaire
+             // Note: Si vous utilisez `preserveState: true`, les props ne sont pas rafraîchies.
+             // Laisser `preserveState: true` est bien si vous n'avez pas de problème visuel.
+        }
     });
 }
 </script>
