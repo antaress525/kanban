@@ -27,7 +27,7 @@ class KanbanController extends Controller
         $statuses = array_column(TaskStatus::cases(), 'value');
         $tasks = collect($statuses)
             ->mapWithKeys(function ($status) use ($kanban) {
-                $data = $kanban->tasks()->where('status', operator: $status)->get();
+                $data = $kanban->tasks()->ordered()->where('status', operator: $status)->get();
                 return [
                     $status => [
                         'total' => $data->count(),
@@ -50,7 +50,6 @@ class KanbanController extends Controller
     }
 
     public function search(Request $request) {
-        sleep(1);
         $query =  trim($request->input('q', ''));
         if($query === ''){
             return response()->json([]);
