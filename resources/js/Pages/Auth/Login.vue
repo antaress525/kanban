@@ -23,7 +23,7 @@
                     <label class="text-red-500 text-sm" v-if="form.errors.password">{{ form.errors.password }}</label>
                 </div>
                 <Button class="w-full bg-black text-white">
-                    <Loader2 v-if="form.processing" class="w-5 h-5 mr-2 animate-spin" />
+                    <Spinner v-if="form.processing" />
                     <LogIn v-else="form.processing" class="w-5 h-5 mr-2" />
                     Accéder à mon espace
                 </Button>
@@ -49,6 +49,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from '@/components/ui/separator'
 import Password from '@/components/custom/input/Password.vue';
 import SocialAuth from './partials/SocialAuth.vue';
+import Spinner from '@/components/Spinner.vue';
 
 defineProps({
     canResetPassword: {

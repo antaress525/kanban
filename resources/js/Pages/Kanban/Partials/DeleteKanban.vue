@@ -14,7 +14,7 @@
             <div class="flex items-center gap-x-3.5">
                 <Button @click="emits('close')" class="flex-1" variant="outline">Non, garder</Button>
                 <Button @click="deleteKanban" class="flex-1" variant="destructive">
-                    <Loader2 v-if="form.processing" class="size-5 animate-spin" />
+                    <Spinner v-if="form.processing" />
                     <Trash v-else class="size-5 text-white"/>
                     Oui, Supprimer
                 </Button>
@@ -25,9 +25,10 @@
 
 <script setup>
 import BaseModal from '@/components/BaseModal.vue';
-import { AlertTriangle, Trash, Loader2 } from 'lucide-vue-next';
+import { AlertTriangle, Trash } from 'lucide-vue-next';
 import Button from '@/components/ui/button/Button.vue';
 import { useForm } from '@inertiajs/vue3';
+import Spinner from '@/components/Spinner.vue';
 
 const props = defineProps({
     open: {
