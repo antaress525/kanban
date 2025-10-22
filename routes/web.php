@@ -69,6 +69,9 @@ Route::prefix('dashboard')
                     ->name('update.base');
                 Route::put('/tasks/{task}/reorder', 'reorder')
                     ->name('reorder');
+                Route::delete('/tasks/{task}', 'destroy')
+                    ->whereNumber('task')
+                    ->name('destroy');
             }
         );
 
