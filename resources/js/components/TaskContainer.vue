@@ -17,10 +17,15 @@
             :group="{ name: 'tasks', pull: true, put: true }"
             item-key="id"
             @change="handleChange"
+            :data-status="name"
             tag="div"
+            :animation="200"
+            :ghost-class="'opacity-40'"
+            :chosen-class="'scale-95'"
+            :component-data="{ name: 'fade-move' }"
         >
             <template #item="{ element }">
-                <div class="cursor-move">
+                <div :key="element.id" class="cursor-move">
                     <slot name="task-item" :task="element"></slot>
                 </div>
             </template>
