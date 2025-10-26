@@ -72,6 +72,8 @@ Route::prefix('dashboard')
                 Route::delete('/tasks/{task}', 'destroy')
                     ->whereNumber('task')
                     ->name('destroy');
+                Route::delete('/tasks', 'bulkDestroy')
+                    ->name('bulk-destroy');
             }
         );
 

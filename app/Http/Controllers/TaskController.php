@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\BulkDeleteTaskAction;
 use App\Models\Task;
 use App\Models\Kanban;
 use App\Actions\CreateTaskAction;
@@ -10,6 +11,7 @@ use App\Actions\UpdateBaseTaskAction;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\ReoderTaskRequest;
 use App\Http\Requests\UpdateBaseTaskRequest;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -55,5 +57,9 @@ class TaskController extends Controller
 
         // Utiliser back() et preserveState dans Inertia pour une mise à jour douce
         return back()->with('success', 'Tâche déplacée avec succès.');
+    }
+
+    public function bulkDestroy(Request $request, BulkDeleteTaskAction $action) {
+        $action->handle($request->input('taskIds'));
     }
 }

@@ -89,11 +89,27 @@
     <Teleport to="body">
         <CreateTask :open="openCreateTask" :kanban-id="kanban.id" :status="statusCreateTask" @close="closeCreateTaskModal"/>
         <EditTask :open="openEditTask" :task="taskSelected" @close="closeEditTaskModal"/>
+        <!-- only delete -->
         <ConfirmDelete
             :open="!!taskToDeleteId" 
             :delete-url="deleteUrl"
+            :data="{
+                taskId: taskToDeleteId
+            }"
             title="Êtes-vous certain de vouloir supprimer cette tâche ?"
             @close="closeDeleteTaskModal"
+        />
+        <!-- bulk delete -->
+        <ConfirmDelete
+            :open="openBulkDeleteTask" 
+            :delete-url="route('task.bulk-destroy')"
+            :title="bulkTitle"
+            :data="{
+                taskIds: selectedTaskIds
+            }"
+            description="La suppression est définitive et vous ne pourrez pas restaurer ces taches."
+            @close="closeBulkDeleteTaskModal"
+            @success="resetselectedTaskIds"
         />
         <BulkActionContainer :count-selected="selectedTaskIds.length">
             <BulkButton @click="resetselectedTaskIds">
@@ -101,7 +117,7 @@
                 Annuler
             </BulkButton>
             <BulkSeparator/>
-            <BulkButton variant="destructive">
+            <BulkButton @click="openBulkDeleteTaskModal" variant="destructive">
                 <Trash2 />
                 Supprimer
             </BulkButton>
@@ -127,8 +143,6 @@ import BulkActionContainer from '@/components/BulkAction/BulkActionContainer.vue
 import BulkButton from '@/components/BulkAction/BulkButton.vue'
 import BulkSeparator from '@/components/BulkAction/BulkSeparator.vue'
 import { XCircle, Trash2 } from 'lucide-vue-next'
-import Checkbox from '@/components/Checkbox.vue'
-import Test from '@/components/Test.vue'
 
 const props = defineProps({
     kanban: {
@@ -163,11 +177,16 @@ const openEditTask = ref(false)
 const statusCreateTask = ref('')
 const taskSelected = ref(null)
 const taskToDeleteId = ref(null);
+const openBulkDeleteTask = ref(false)
 const selectedTaskIds = ref([]);
 
 const deleteUrl = computed(() => {
     return taskToDeleteId.value ? route('task.destroy', taskToDeleteId.value) : null;
 });
+
+const bulkTitle = computed(() => {
+    return `Êtes-vous certain de vouloir supprimer les ${selectedTaskIds.value.length} tâches ?`
+})
 
 const openCreateTaskModal = (name) => {
     statusCreateTask.value = name
@@ -191,7 +210,15 @@ const openDeleteTaskModal = (taskId) => {
 }
 
 const closeDeleteTaskModal = () => {
+    clearselectedTaskIds(taskToDeleteId.value)
     taskToDeleteId.value = null;
+}
+
+const openBulkDeleteTaskModal = () => {
+    openBulkDeleteTask.value = true
+}
+const closeBulkDeleteTaskModal = () => {
+    openBulkDeleteTask.value = false
 }
 
 const resetselectedTaskIds = () => {

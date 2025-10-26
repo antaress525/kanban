@@ -35,12 +35,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    // Rendre l'URL de suppression configurable (recommandation)
     deleteUrl: {
         type: [String, null],
         default: null
     },
-    // Rendre les textes configurables pour la réutilisabilité
     title: {
         type: String,
         default: 'Êtes-vous certain de vouloir supprimer ?'
@@ -48,24 +46,28 @@ const props = defineProps({
     description: {
         type: String,
         default: 'La suppression est définitive et vous ne pourrez pas restaurer cet élément.'
+    },
+    data: {
+        type: Object
     }
 })
 
 const emits = defineEmits(['close', 'success'])
 
-// Utilisation de useForm pour la gestion du state processing
-const form = useForm({}) 
+const form = useForm() 
 
 const handleDelete = () => {
     if (!props.deleteUrl) return;
 
-    form.delete(props.deleteUrl, {
+    form.transform((data) => ({
+        ...data,
+        ...props.data
+    }))
+    .delete(props.deleteUrl, {
         preserveScroll: true,
-        // On ferme la modale après la requête
         onFinish: () => {
             emits('close')
         },
-        // On émet un événement 'success' si besoin d'actions supplémentaires dans le parent
         onSuccess: () => {
             emits('success')
         }
