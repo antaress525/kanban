@@ -46,7 +46,12 @@
                 class="w-80 flex-shrink-0 snap-center md:flex-1 md:w-auto"
             >
                 <template #task-item="{ task }">
-                    <TaskItem :task="task" @edit-task="openEditTaskModal" @delete-task="openDeleteTaskModal"/>
+                    <TaskItem 
+                        :key="task.id" :task="task"
+                        v-model="selectedTaskIds"
+                        @edit-task="openEditTaskModal" 
+                        @delete-task="openDeleteTaskModal"
+                    />
                 </template>
             </TaskContainer>
             
@@ -61,7 +66,7 @@
                 class="w-80 flex-shrink-0 snap-center md:flex-1 md:w-auto"
             >
                 <template #task-item="{ task }">
-                    <TaskItem :task="task" @edit-task="openEditTaskModal" @delete-task="openDeleteTaskModal"/>
+                    <TaskItem v-model="selectedTaskIds"   :task="task" @edit-task="openEditTaskModal" @delete-task="openDeleteTaskModal"/>
                 </template>
             </TaskContainer>
             
@@ -76,7 +81,7 @@
                 class="w-80 flex-shrink-0 snap-center md:flex-1 md:w-auto"
             >
                 <template #task-item="{ task }">
-                    <TaskItem :task="task" @edit-task="openEditTaskModal" @delete-task="openDeleteTaskModal"/>
+                    <TaskItem v-model="selectedTaskIds" :task="task" @edit-task="openEditTaskModal" @delete-task="openDeleteTaskModal"/>
                 </template>
             </TaskContainer>
         </div>
@@ -90,23 +95,40 @@
             title="Êtes-vous certain de vouloir supprimer cette tâche ?"
             @close="closeDeleteTaskModal"
         />
+        <BulkActionContainer :count-selected="selectedTaskIds.length">
+            <BulkButton @click="resetselectedTaskIds">
+                <XCircle/>
+                Annuler
+            </BulkButton>
+            <BulkSeparator/>
+            <BulkButton variant="destructive">
+                <Trash2 />
+                Supprimer
+            </BulkButton>
+        </BulkActionContainer>
     </Teleport>
 </AuthenticatedLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Input } from "@/components/ui/input"
-import { Search, UserPlus, Settings2 } from 'lucide-vue-next';
-import { Button } from '@/components/ui/button';
+import { Search, UserPlus, Settings2 } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button'
 import defaultCoverImage from '@img/default_cover_image.jpg'
-import TaskContainer from '@/components/TaskContainer.vue';
-import TaskItem from '@/components/TaskItem.vue';
-import CreateTask from './Partials/CreateTask.vue';
-import EditTask from './Partials/EditTask.vue';
-import { ref, watch, computed } from 'vue';
-import { router, Head } from '@inertiajs/vue3';
-import ConfirmDelete from '@/components/ConfirmDelete.vue';
+import TaskContainer from '@/components/TaskContainer.vue'
+import TaskItem from '@/components/TaskItem.vue'
+import CreateTask from './Partials/CreateTask.vue'
+import EditTask from './Partials/EditTask.vue'
+import { ref, watch, computed } from 'vue'
+import { router, Head } from '@inertiajs/vue3'
+import ConfirmDelete from '@/components/ConfirmDelete.vue'
+import BulkActionContainer from '@/components/BulkAction/BulkActionContainer.vue'
+import BulkButton from '@/components/BulkAction/BulkButton.vue'
+import BulkSeparator from '@/components/BulkAction/BulkSeparator.vue'
+import { XCircle, Trash2 } from 'lucide-vue-next'
+import Checkbox from '@/components/Checkbox.vue'
+import Test from '@/components/Test.vue'
 
 const props = defineProps({
     kanban: {
@@ -141,6 +163,7 @@ const openEditTask = ref(false)
 const statusCreateTask = ref('')
 const taskSelected = ref(null)
 const taskToDeleteId = ref(null);
+const selectedTaskIds = ref([]);
 
 const deleteUrl = computed(() => {
     return taskToDeleteId.value ? route('task.destroy', taskToDeleteId.value) : null;
@@ -156,7 +179,7 @@ const closeCreateTaskModal = () => {
 }
 const openEditTaskModal = (task) => {
     taskSelected.value = task
-   openEditTask.value = true
+    openEditTask.value = true
 }
 const closeEditTaskModal = () => {
    openEditTask.value = false 
@@ -169,6 +192,15 @@ const openDeleteTaskModal = (taskId) => {
 
 const closeDeleteTaskModal = () => {
     taskToDeleteId.value = null;
+}
+
+const resetselectedTaskIds = () => {
+    selectedTaskIds.value = []
+}
+const clearselectedTaskIds = (taskId) => {
+    selectedTaskIds.value = selectedTaskIds.value.filter((id) => {
+        return id !== taskId
+    })
 }
 
 /**

@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex flex-col gap-y-0.5">
             <div class="flex items-center gap-x-2">
-                <Checkbox @click.stop="" />
+                <Checkbox @click.stop="" :value="task.id" v-model="model" />
                 <p class="font-medium text-sm w-full">{{ task.title }}</p>
                 <!-- Desktop -->
                 <button 
@@ -33,17 +33,17 @@
 </template>
 
 <script setup>
-import { Checkbox } from "@/components/ui/checkbox"
-import Tag from '@/components/Tag.vue';
-import { computed } from "vue";
-import { Trash2 } from 'lucide-vue-next';
-import { router } from "@inertiajs/vue3";
+import Tag from '@/components/Tag.vue'
+import { computed } from "vue"
+import { Trash2 } from 'lucide-vue-next'
+import Checkbox from './Checkbox.vue'
 
 const props = defineProps({
     task: {
         type: Object
     }
 })
+const model = defineModel()
 const emits = defineEmits(['editTask', 'deleteTask'])
 
 const priority = computed(() => {
