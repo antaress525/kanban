@@ -52,6 +52,9 @@ Route::prefix('dashboard')
                 Route::post('/{kanban}/cover', 'updateCover')
                     ->whereNumber('kanban')
                     ->name('update_cover');
+                Route::delete('/{kanban}/cover', 'deleteCover')
+                    ->whereNumber('kanban')
+                    ->name('delete_cover');
 
             }
         );

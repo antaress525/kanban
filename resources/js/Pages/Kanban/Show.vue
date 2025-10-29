@@ -13,7 +13,10 @@
                     :processing="form.processing" 
                     @change="handleFileChange"
                 />
-                <Button variant="destructive" size="xs">Supprimer la cover</Button>
+                <Button v-if="kanban.cover_image" class="w-28" @click="handleDeleteCover" variant="destructive" size="xs">
+                    <span v-if="!deleteCoverFrom.processing">Supprimer la cover</span>
+                    <Spinner v-else class="14px" />
+                </Button>
             </div>
         </div>
         <!-- Title + Search -->
@@ -152,6 +155,7 @@ import BulkButton from '@/components/BulkAction/BulkButton.vue'
 import BulkSeparator from '@/components/BulkAction/BulkSeparator.vue'
 import { XCircle, Trash2 } from 'lucide-vue-next'
 import FileUpload from '@/components/FileUpload.vue'
+import Spinner from '@/components/Spinner.vue'
 
 const props = defineProps({
     kanban: {
@@ -188,9 +192,10 @@ const taskSelected = ref(null)
 const taskToDeleteId = ref(null)
 const openBulkDeleteTask = ref(false)
 const selectedTaskIds = ref([])
-const form  = useForm({
+const form = useForm({
     cover_image: null,
 })
+const deleteCoverFrom = useForm({});
 
 const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -202,7 +207,6 @@ const handleFileChange = (event) => {
 };
 
 const submitCoverImage = () => {
-    // Vérifiez si une nouvelle image a été sélectionnée
     if (!form.cover_image) {
         alert("Veuillez sélectionner une image.");
         return;
@@ -218,6 +222,12 @@ const submitCoverImage = () => {
         }
     });
 };
+
+const handleDeleteCover = () => {
+    deleteCoverFrom.delete(route('kanban.delete_cover', props.kanban.id), {
+        preserveScroll: true,
+    })
+}
 
 const deleteUrl = computed(() => {
     return taskToDeleteId.value ? route('task.destroy', taskToDeleteId.value) : null;
