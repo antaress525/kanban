@@ -13,7 +13,7 @@
                     :processing="form.processing" 
                     @change="handleFileChange"
                 />
-                <Button class="w-28" @click="handleDeleteCover" variant="destructive" size="xs">
+                <Button v-if="kanban.cover_image" class="w-28" @click="handleDeleteCover" variant="destructive" size="xs">
                     <span v-if="!deleteCoverFrom.processing">Supprimer la cover</span>
                     <Spinner v-else class="14px" />
                 </Button>
