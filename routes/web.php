@@ -49,6 +49,10 @@ Route::prefix('dashboard')
                     ->whereNumber('kanban')
                     ->name('delete');
                 Route::get('seacrh', 'search')->name('search');
+                Route::post('/{kanban}/cover', 'updateCover')
+                    ->whereNumber('kanban')
+                    ->name('update_cover');
+
             }
         );
 

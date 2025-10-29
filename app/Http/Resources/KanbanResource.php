@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class KanbanResource extends JsonResource
 {
+    public static $wrap = null;
+    
     /**
      * Transform the resource into an array.
      *
@@ -19,8 +21,9 @@ class KanbanResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'description' => $this->description,
             'color' => $this->color,
-            'cover_image' => $this->cover_image,
+            'cover_image' => $this->getUrlCoverImage(),
         ];
     }
 }

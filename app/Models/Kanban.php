@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Scout\Searchable;
 
 class Kanban extends Model
 {
@@ -46,5 +48,9 @@ class Kanban extends Model
             'created_at' => $this->created_at->timestamp,
         ];
 
+    }
+
+    public function getUrlCoverImage() {
+        return $this->cover_image ? Storage::disk('public')->url($this->cover_image) : null;
     }
 }
