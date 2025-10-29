@@ -3,9 +3,17 @@
     <Head :title="kanban.title"></Head>
     <div class="space-y-6">
         <!-- Cover image -->
-        <div class="relative overflow-hidden rounded-xl h-[120px] md:h-[160px] bg-cover bg-center" :style="`background-image: url(${defaultCoverImage})`">
+        <div class="relative overflow-hidden rounded-xl h-[120px] md:h-[160px] bg-cover bg-center" :style="`background-image: url(${kanban.cover_image ? kanban.cover_image : defaultCoverImage})`">
             <!-- <img :src="defaultCoverImage" alt=""> -->
-            <div class="flex items-center absolute">
+            <div class="flex items-center gap-x-2 absolute top-2 right-2">
+                <FileUpload 
+                    class="w-28"
+                    label="Change la cover"
+                    id="cover-image" 
+                    :processing="form.processing" 
+                    @change="handleFileChange"
+                />
+                <Button variant="destructive" size="xs">Supprimer la cover</Button>
             </div>
         </div>
         <!-- Title + Search -->
@@ -137,12 +145,13 @@ import TaskItem from '@/components/TaskItem.vue'
 import CreateTask from './Partials/CreateTask.vue'
 import EditTask from './Partials/EditTask.vue'
 import { ref, watch, computed } from 'vue'
-import { router, Head } from '@inertiajs/vue3'
+import { router, Head, useForm } from '@inertiajs/vue3'
 import ConfirmDelete from '@/components/ConfirmDelete.vue'
 import BulkActionContainer from '@/components/BulkAction/BulkActionContainer.vue'
 import BulkButton from '@/components/BulkAction/BulkButton.vue'
 import BulkSeparator from '@/components/BulkAction/BulkSeparator.vue'
 import { XCircle, Trash2 } from 'lucide-vue-next'
+import FileUpload from '@/components/FileUpload.vue'
 
 const props = defineProps({
     kanban: {
@@ -176,9 +185,39 @@ const openCreateTask = ref(false)
 const openEditTask = ref(false)
 const statusCreateTask = ref('')
 const taskSelected = ref(null)
-const taskToDeleteId = ref(null);
+const taskToDeleteId = ref(null)
 const openBulkDeleteTask = ref(false)
-const selectedTaskIds = ref([]);
+const selectedTaskIds = ref([])
+const form  = useForm({
+    cover_image: null,
+})
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        form.cover_image = file;
+        console.log(`Fichier sélectionné: ${form.cover_image}`);
+        submitCoverImage();
+    }
+};
+
+const submitCoverImage = () => {
+    // Vérifiez si une nouvelle image a été sélectionnée
+    if (!form.cover_image) {
+        alert("Veuillez sélectionner une image.");
+        return;
+    }
+
+    form.post(route('kanban.update_cover', props.kanban.id), {  
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset()
+        },
+        onError: (errors) => {
+            console.error("Erreur d'upload:", errors);
+        }
+    });
+};
 
 const deleteUrl = computed(() => {
     return taskToDeleteId.value ? route('task.destroy', taskToDeleteId.value) : null;
