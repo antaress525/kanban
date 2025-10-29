@@ -9,6 +9,7 @@ use App\Enums\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Actions\CreateKanbanAction;
+use App\Actions\DeleteCoverAction;
 use App\Actions\DeleteKanbanAction;
 use App\Actions\UpdateCoverAction;
 use App\Http\Requests\KanbanRequest;
@@ -70,5 +71,13 @@ class KanbanController extends Controller
         $cover = $request->validated('cover_image');
         $action->handle($kanban, $cover);
         return back()->with('success', 'Image de couverture mise à jour !');
+    }
+
+    public function deleteCover(Kanban $kanban, DeleteCoverAction $action) {
+        if(!$kanban->cover_image) {
+            return;   
+        }
+        $action->handle($kanban);
+        return back()->with('success', 'Image de couverture supprimer');
     }
 }
